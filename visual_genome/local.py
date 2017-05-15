@@ -256,7 +256,8 @@ def add_attrs_to_scene_graphs(data_dir='data/'):
         sg_dict = {sg['image_id']: sg for sg in json.load(f)}
 
     id_count = 0
-    for img_attrs in attr_data:
+    bar = progressbar.ProgressBar()
+    for img_attrs in bar(attr_data):
         attrs = []
         for attribute in img_attrs['attributes']:
             a = img_attrs.copy()
@@ -269,7 +270,7 @@ def add_attrs_to_scene_graphs(data_dir='data/'):
         sg_dict[iid]['attributes'] = attrs
 
     with open(os.path.join(data_dir, 'scene_graphs.json'), 'w') as f:
-        json.dump(sg_dict.values(), f)
+        json.dump(list(sg_dict.values()), f)
     del attr_data, sg_dict
     gc.collect()
 
