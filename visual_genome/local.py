@@ -252,7 +252,7 @@ def add_attrs_to_scene_graphs(data_dir='data/'):
     attibutes for each object (these are grouped in `attributes.json`).
     """
     attr_data = json.load(open(os.path.join(data_dir, 'attributes.json')))
-    with open(os.path.join(data_dir, 'scene_graphs.json')) as f:
+    with open(os.path.join(data_dir, 'scene_graphs.json'), 'r') as f:
         sg_dict = {sg['image_id']: sg for sg in json.load(f)}
 
     id_count = 0
