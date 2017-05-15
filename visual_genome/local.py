@@ -234,7 +234,8 @@ def save_scene_graphs_by_id(data_dir='data/', image_data_dir='data/by-id/'):
         os.mkdir(image_data_dir)
 
     all_data = json.load(open(os.path.join(data_dir, 'scene_graphs.json')))
-    for sg_data in all_data:
+    bar = progressbar.ProgressBar()
+    for sg_data in bar(all_data):
         img_fname = str(sg_data['image_id']) + '.json'
         with open(os.path.join(image_data_dir, img_fname), 'w') as f:
             json.dump(sg_data, f)
