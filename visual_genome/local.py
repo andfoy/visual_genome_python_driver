@@ -101,7 +101,7 @@ def get_scene_graphs(start_index=0, end_index=-1,
     if (end_index < 1):
         end_index = len(img_fnames)
 
-    bar = progressbar.Bar()
+    bar = progressbar.ProgressBar()
     for fname in bar(img_fnames[start_index: end_index]):
         image_id = int(fname.split('.')[0])
         scene_graph = get_scene_graph(
