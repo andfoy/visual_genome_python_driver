@@ -2,6 +2,7 @@
 import os
 import gc
 import json
+import progressbar
 import visual_genome.utils as utils
 from visual_genome.models import (Image, Object, Attribute, Relationship,
                                   Graph, Synset)
@@ -100,7 +101,8 @@ def get_scene_graphs(start_index=0, end_index=-1,
     if (end_index < 1):
         end_index = len(img_fnames)
 
-    for fname in img_fnames[start_index: end_index]:
+    bar = progressbar.Bar()
+    for fname in bar(img_fnames[start_index: end_index]):
         image_id = int(fname.split('.')[0])
         scene_graph = get_scene_graph(
             image_id, images, image_data_dir, data_dir + 'synsets.json')
