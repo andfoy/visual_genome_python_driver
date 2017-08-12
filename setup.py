@@ -22,7 +22,7 @@ def get_description():
     return data
 
 
-REQUIREMENTS = ['requests']
+REQUIREMENTS = ['requests', 'progressbar2']
 
 setup(
     name='visual_genome',

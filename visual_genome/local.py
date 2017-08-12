@@ -2,6 +2,7 @@
 import os
 import gc
 import json
+import progressbar
 import visual_genome.utils as utils
 from visual_genome.models import (Image, Object, Attribute, Relationship,
                                   Graph, Synset)
@@ -100,7 +101,8 @@ def get_scene_graphs(start_index=0, end_index=-1,
     if (end_index < 1):
         end_index = len(img_fnames)
 
-    for fname in img_fnames[start_index: end_index]:
+    bar = progressbar.ProgressBar()
+    for fname in bar(img_fnames[start_index: end_index]):
         image_id = int(fname.split('.')[0])
         scene_graph = get_scene_graph(
             image_id, images, image_data_dir, data_dir + 'synsets.json')
@@ -235,7 +237,8 @@ def save_scene_graphs_by_id(data_dir='data/', image_data_dir='data/by-id/'):
         os.mkdir(image_data_dir)
 
     all_data = json.load(open(os.path.join(data_dir, 'scene_graphs.json')))
-    for sg_data in all_data:
+    bar = progressbar.ProgressBar()
+    for sg_data in bar(all_data):
         img_fname = str(sg_data['image_id']) + '.json'
         with open(os.path.join(image_data_dir, img_fname), 'w') as f:
             json.dump(sg_data, f)
@@ -252,11 +255,12 @@ def add_attrs_to_scene_graphs(data_dir='data/'):
     attibutes for each object (these are grouped in `attributes.json`).
     """
     attr_data = json.load(open(os.path.join(data_dir, 'attributes.json')))
-    with open(os.path.join(data_dir, 'scene_graphs.json')) as f:
+    with open(os.path.join(data_dir, 'scene_graphs.json'), 'r') as f:
         sg_dict = {sg['image_id']: sg for sg in json.load(f)}
 
     id_count = 0
-    for img_attrs in attr_data:
+    bar = progressbar.ProgressBar()
+    for img_attrs in bar(attr_data):
         attrs = []
         for attribute in img_attrs['attributes']:
             a = img_attrs.copy()
@@ -269,7 +273,7 @@ def add_attrs_to_scene_graphs(data_dir='data/'):
         sg_dict[iid]['attributes'] = attrs
 
     with open(os.path.join(data_dir, 'scene_graphs.json'), 'w') as f:
-        json.dump(sg_dict.values(), f)
+        json.dump(list(sg_dict.values()), f)
     del attr_data, sg_dict
     gc.collect()
 
